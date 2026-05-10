@@ -1,93 +1,78 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="icon" type="image/png" href="index.png">
-  <title>DigitalReadingLog</title>
-  <link rel="stylesheet" href="style.css"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/png" href="index.png">
+<title>DigitalReadingLog</title>
+<link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
 <div class="theme-wrap">
-  <button id="themeToggle">🌙 Dark Mode</button>
+<button id="themeToggle">🌙 Dark Mode</button>
 </div>
 
 <div class="container">
 
 <header>
-  <h1>DigitalReadingLog</h1>
-  <p>The paper reading log — without the paper problems.</p>
+<h1>DigitalReadingLog</h1>
+<p>The paper reading log — without the paper problems.</p>
 
-  <div class="top-actions">
-    <button id="exportBtn">Export PDF</button>
-    <button id="printBtn">Print</button>
-    <button id="shareBtn">Copy Share Link</button>
-    <button id="clearBtn">Clear Log</button>
-  </div>
+<div class="top-actions">
+<button id="exportBtn">Export PDF</button>
+<button id="printBtn">Print</button>
+<button id="shareBtn">Copy Share Link</button>
+<button id="clearBtn">Clear Log</button>
+</div>
 
-  <div id="saveStatus">✓ Auto Saved</div>
-  <div id="logId"></div>
+<div id="saveStatus">✓ Auto Saved</div>
+<div id="logId"></div>
 </header>
 
 <section class="timer-card">
-  <h2>Reading Timer</h2>
+<h2>Reading Timer</h2>
 
-  <div class="timer-controls">
-    <input type="number" id="timerMinutes" min="1" value="25">
-    <span>minutes</span>
-  </div>
+<div class="timer-controls">
+<input type="number" id="timerMinutes" min="1" value="25">
+<span>minutes</span>
+</div>
 
-  <div class="preset-buttons">
-    <button class="preset" data-min="15">15</button>
-    <button class="preset" data-min="20">20</button>
-    <button class="preset" data-min="25">25</button>
-    <button class="preset" data-min="30">30</button>
-  </div>
+<div class="preset-buttons">
+<button class="preset" data-min="15">15</button>
+<button class="preset" data-min="20">20</button>
+<button class="preset" data-min="25">25</button>
+<button class="preset" data-min="30">30</button>
+</div>
 
-  <div id="timerDisplay">25:00</div>
+<div id="timerDisplay">25:00</div>
 
-  <div class="timer-buttons">
-    <button id="startTimer">Start</button>
-    <button id="pauseTimer">Pause</button>
-    <button id="resetTimer">Reset</button>
-  </div>
+<div class="timer-buttons">
+<button id="startTimer">Start</button>
+<button id="pauseTimer">Pause</button>
+<button id="resetTimer">Reset</button>
+</div>
 </section>
 
 <section class="reading-log" id="readingLog">
 
 <div class="top-fields">
-  <label>
-    Name
-    <input type="text" data-save="studentName">
-  </label>
-
-  <label>
-    Homeroom
-    <input type="text" data-save="homeroom">
-  </label>
-
-  <label>
-    Week Of
-    <input type="date" data-save="weekOf">
-  </label>
+<label>Name<input type="text" data-save="studentName"></label>
+<label>Homeroom<input type="text" data-save="homeroom"></label>
+<label>Week Of<input type="date" data-save="weekOf"></label>
 </div>
 
 <div class="goal-section">
-  <label>
-    Goal for the Week
-    <input type="text" data-save="weeklyGoal">
-  </label>
+<label>Goal for the Week<input type="text" data-save="weeklyGoal"></label>
 
-  <label>
-    Goal Met?
-    <select data-save="goalMet">
-      <option value="">Select</option>
-      <option>YES</option>
-      <option>NO</option>
-    </select>
-  </label>
+<label>
+Goal Met?
+<select data-save="goalMet">
+<option value="">Select</option>
+<option>YES</option>
+<option>NO</option>
+</select>
+</label>
 </div>
 
 <div class="table-wrapper">
@@ -115,17 +100,17 @@ Genre: NF (nonfiction), F (fiction)
 </div>
 
 <div class="signature-modal hidden" id="signatureModal">
-  <div class="signature-box">
-    <h3>Parent Initials</h3>
+<div class="signature-box">
+<h3>Parent Initials</h3>
 
-    <canvas id="signatureCanvas" width="320" height="160"></canvas>
+<canvas id="signatureCanvas" width="320" height="160"></canvas>
 
-    <div class="signature-actions">
-      <button id="clearSignature">Clear</button>
-      <button id="saveSignature">Save</button>
-      <button id="closeSignature">Close</button>
-    </div>
-  </div>
+<div class="signature-actions">
+<button id="clearSignature">Clear</button>
+<button id="saveSignature">Save</button>
+<button id="closeSignature">Close</button>
+</div>
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>

@@ -24,10 +24,12 @@ A lightweight Vanilla JavaScript reading log app.
 
 Deploy.
 
-## Local Development
+## Local Development    
 
-Simply open:
-index.html
+Simply open:   
+index.html   
 
-Or use:
-VS Code Live Server extension.
+Or use:   
+VS Code Live Server extension.     
+
+OR visit the website

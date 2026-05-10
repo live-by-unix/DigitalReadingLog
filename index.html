@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,21 +9,19 @@
 <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-
 <div class="theme-wrap">
 <button id="themeToggle">🌙 Dark Mode</button>
 </div>
 
 <div class="container">
-
 <header>
-<h1>DigitalReadingLog</h1>
+<h1>DigitalReadingLog.com</h1>
 <p>The paper reading log — without the paper problems.</p>
 
 <div class="top-actions">
 <button id="exportBtn">Export PDF</button>
 <button id="printBtn">Print</button>
-<button id="shareBtn">Copy Share Link</button>
+<button id="shareBtn">Create Share Link</button>
 <button id="clearBtn">Clear Log</button>
 </div>
 
@@ -55,7 +54,6 @@
 </section>
 
 <section class="reading-log" id="readingLog">
-
 <div class="top-fields">
 <label>Name<input type="text" data-save="studentName"></label>
 <label>Homeroom<input type="text" data-save="homeroom"></label>
@@ -87,7 +85,6 @@ Goal Met?
 <th>Parent Initials</th>
 </tr>
 </thead>
-
 <tbody id="logBody"></tbody>
 </table>
 </div>
@@ -95,14 +92,12 @@ Goal Met?
 <div class="legend">
 Genre: NF (nonfiction), F (fiction)
 </div>
-
 </section>
 </div>
 
 <div class="signature-modal hidden" id="signatureModal">
 <div class="signature-box">
 <h3>Parent Initials</h3>
-
 <canvas id="signatureCanvas" width="320" height="160"></canvas>
 
 <div class="signature-actions">
@@ -117,6 +112,5 @@ Genre: NF (nonfiction), F (fiction)
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="js/app.js"></script>
-
 </body>
 </html>

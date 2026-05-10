@@ -13,16 +13,7 @@ A lightweight Vanilla JavaScript reading log app.
 - Print support
 - No backend required
 
-## Deploy to Cloudflare Pages
 
-1. Upload the folder to GitHub
-2. Go to Cloudflare Pages
-3. Connect repository
-4. Framework preset: None
-5. Build command: leave blank
-6. Output directory: /
-
-Deploy.
 
 ## Local Development    
 

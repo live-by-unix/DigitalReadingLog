@@ -1,191 +1,200 @@
 
-const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+const days = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
 const logBody = document.getElementById("logBody");
-const saveStatus = document.getElementById("saveStatus");
 
-let currentSignatureDay = null;
+days.forEach(day=>{
+  const row = document.createElement("tr");
 
-days.forEach(day => {
-  const tr = document.createElement("tr");
-
-  tr.innerHTML = `
-    <td class="day-cell">${day}</td>
+  row.innerHTML = `
+    <td>${day}</td>
     <td><input class="table-input" data-save="${day}-book"></td>
     <td><input class="table-input" data-save="${day}-genre"></td>
     <td><input class="table-input minutes-field" data-save="${day}-minutes"></td>
-    <td><input class="table-input" data-save="${day}-pages"></td>
+    <td><input class="table-input pages-field" data-save="${day}-pages"></td>
     <td>
       <button class="sign-btn" data-day="${day}">Sign</button>
       <div>
-        <img class="signature-preview" id="${day}-signature-preview"/>
+        <img class="signature-preview" id="${day}-signature-preview">
       </div>
     </td>
   `;
 
-  logBody.appendChild(tr);
+  logBody.appendChild(row);
 });
 
-function saveData() {
-  document.querySelectorAll("[data-save]").forEach(el => {
-    localStorage.setItem(el.dataset.save, el.value);
+document.querySelectorAll("[data-save]").forEach(el=>{
+  const saved = localStorage.getItem(el.dataset.save);
+
+  if(saved !== null){
+    el.value = saved;
+  }
+
+  el.addEventListener("input",()=>{
+    localStorage.setItem(el.dataset.save,el.value);
   });
+});
 
-  saveStatus.textContent = "✓ Saved Automatically";
+let logId = localStorage.getItem("readingLogId");
 
-  setTimeout(() => {
-    saveStatus.textContent = "✓ All Changes Saved";
-  }, 1200);
+if(!logId){
+  logId = "readinglog-" + Math.random().toString(36).substring(2,10);
+  localStorage.setItem("readingLogId",logId);
 }
 
-function loadData() {
-  document.querySelectorAll("[data-save]").forEach(el => {
-    const saved = localStorage.getItem(el.dataset.save);
-    if (saved !== null) {
-      el.value = saved;
-    }
-  });
+document.getElementById("logId").textContent =
+location.origin + "/" + logId;
 
-  days.forEach(day => {
-    const sig = localStorage.getItem(`${day}-signature`);
-    if (sig) {
-      document.getElementById(`${day}-signature-preview`).src = sig;
-    }
-  });
+const themeToggle = document.getElementById("themeToggle");
+
+if(localStorage.getItem("theme")==="dark"){
+  document.body.classList.add("dark");
+  themeToggle.textContent = "☀️ Light Mode";
 }
 
-document.addEventListener("input", saveData);
+themeToggle.addEventListener("click",()=>{
+  document.body.classList.toggle("dark");
 
-loadData();
+  const dark = document.body.classList.contains("dark");
 
-// TIMER
+  localStorage.setItem("theme",dark ? "dark" : "light");
+
+  themeToggle.textContent =
+  dark ? "☀️ Light Mode" : "🌙 Dark Mode";
+});
+
+let remainingSeconds =
+Number(localStorage.getItem("timerRemaining")) || 1500;
+
 const timerDisplay = document.getElementById("timerDisplay");
 const timerMinutes = document.getElementById("timerMinutes");
 
-let timer;
-let remainingSeconds = Number(localStorage.getItem("timerRemaining")) || 1500;
+function updateTimer(){
+  const mins = String(Math.floor(remainingSeconds/60)).padStart(2,"0");
+  const secs = String(remainingSeconds%60).padStart(2,"0");
 
-function updateTimerDisplay() {
-  const mins = String(Math.floor(remainingSeconds / 60)).padStart(2, "0");
-  const secs = String(remainingSeconds % 60).padStart(2, "0");
   timerDisplay.textContent = `${mins}:${secs}`;
 }
 
-updateTimerDisplay();
+updateTimer();
 
-document.querySelectorAll(".preset").forEach(btn => {
-  btn.addEventListener("click", () => {
+document.querySelectorAll(".preset").forEach(btn=>{
+  btn.addEventListener("click",()=>{
     timerMinutes.value = btn.dataset.min;
     remainingSeconds = Number(btn.dataset.min) * 60;
-    updateTimerDisplay();
+    updateTimer();
   });
 });
 
-document.getElementById("startTimer").addEventListener("click", () => {
+let timer;
+
+document.getElementById("startTimer").addEventListener("click",()=>{
   clearInterval(timer);
 
-  timer = setInterval(() => {
+  timer = setInterval(()=>{
     remainingSeconds--;
 
-    localStorage.setItem("timerRemaining", remainingSeconds);
+    localStorage.setItem("timerRemaining",remainingSeconds);
 
-    updateTimerDisplay();
+    updateTimer();
 
-    if (remainingSeconds <= 0) {
+    if(remainingSeconds <= 0){
       clearInterval(timer);
-
-      alert("Reading session complete!");
-
-      const today = new Date().toLocaleDateString("en-US", {
-        weekday: "long"
-      });
-
-      const field = document.querySelector(`[data-save="${today}-minutes"]`);
-
-      if (field && !field.value) {
-        field.value = timerMinutes.value;
-        saveData();
-      }
+      alert("Reading complete!");
     }
-  }, 1000);
+  },1000);
 });
 
-document.getElementById("pauseTimer").addEventListener("click", () => {
+document.getElementById("pauseTimer").addEventListener("click",()=>{
   clearInterval(timer);
 });
 
-document.getElementById("resetTimer").addEventListener("click", () => {
+document.getElementById("resetTimer").addEventListener("click",()=>{
   clearInterval(timer);
 
   remainingSeconds = Number(timerMinutes.value) * 60;
 
-  localStorage.setItem("timerRemaining", remainingSeconds);
-
-  updateTimerDisplay();
+  updateTimer();
 });
 
-// SIGNATURE
 const modal = document.getElementById("signatureModal");
 const canvas = document.getElementById("signatureCanvas");
 
 const signaturePad = new SignaturePad(canvas);
 
-document.querySelectorAll(".sign-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    currentSignatureDay = btn.dataset.day;
+let currentSignatureDay = null;
+
+document.addEventListener("click",(e)=>{
+  if(e.target.classList.contains("sign-btn")){
+    currentSignatureDay = e.target.dataset.day;
     modal.classList.remove("hidden");
-  });
+  }
 });
 
-document.getElementById("clearSignature").addEventListener("click", () => {
+document.getElementById("clearSignature").addEventListener("click",()=>{
   signaturePad.clear();
 });
 
-document.getElementById("closeSignature").addEventListener("click", () => {
+document.getElementById("closeSignature").addEventListener("click",()=>{
   modal.classList.add("hidden");
 });
 
-document.getElementById("saveSignature").addEventListener("click", () => {
-  if (signaturePad.isEmpty()) {
-    alert("Please draw initials first.");
+document.getElementById("saveSignature").addEventListener("click",()=>{
+  if(signaturePad.isEmpty()){
+    alert("Draw initials first.");
     return;
   }
 
-  const dataURL = signaturePad.toDataURL();
+  const data = signaturePad.toDataURL();
 
-  localStorage.setItem(`${currentSignatureDay}-signature`, dataURL);
+  localStorage.setItem(`${currentSignatureDay}-signature`,data);
 
-  document.getElementById(`${currentSignatureDay}-signature-preview`).src = dataURL;
+  document.getElementById(`${currentSignatureDay}-signature-preview`).src = data;
 
   modal.classList.add("hidden");
 });
 
-// PDF EXPORT
-document.getElementById("exportBtn").addEventListener("click", async () => {
+days.forEach(day=>{
+  const savedSig = localStorage.getItem(`${day}-signature`);
+
+  if(savedSig){
+    document.getElementById(`${day}-signature-preview`).src = savedSig;
+  }
+});
+
+document.getElementById("exportBtn").addEventListener("click",async()=>{
   const { jsPDF } = window.jspdf;
 
-  const canvas = await html2canvas(document.getElementById("readingLog"));
+  const target = document.getElementById("readingLog");
+
+  const canvas = await html2canvas(target,{
+    scale:2
+  });
 
   const imgData = canvas.toDataURL("image/png");
 
-  const pdf = new jsPDF("p", "mm", "a4");
+  const pdf = new jsPDF("p","mm","a4");
 
   const width = 190;
   const height = canvas.height * width / canvas.width;
 
-  pdf.addImage(imgData, "PNG", 10, 10, width, height);
+  pdf.addImage(imgData,"PNG",10,10,width,height);
 
   pdf.save("DigitalReadingLog.pdf");
 });
 
-// PRINT
-document.getElementById("printBtn").addEventListener("click", () => {
+document.getElementById("printBtn").addEventListener("click",()=>{
   window.print();
 });
 
-// CLEAR
-document.getElementById("clearBtn").addEventListener("click", () => {
-  if (!confirm("Clear entire reading log?")) return;
+document.getElementById("shareBtn").addEventListener("click",async()=>{
+  await navigator.clipboard.writeText(location.origin + "/" + logId);
 
-  localStorage.clear();
-  location.reload();
+  alert("Share link copied!");
+});
+
+document.getElementById("clearBtn").addEventListener("click",()=>{
+  if(confirm("Clear reading log?")){
+    localStorage.clear();
+    location.reload();
+  }
 });
